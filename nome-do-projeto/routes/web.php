@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\CategoriaController;
+    Route::resource('categorias', CategoriaController::class);
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    use App\Http\Controllers\ProdutoController;
+    Route::resource('produtos', ProdutoController::class);
+
+
