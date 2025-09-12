@@ -4,22 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Produto;
 use App\Models\Categoria;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
     public function index()
     {
-        $produtos = Produto::with(['categoria', 'user'])->get();
+        $produtos = Produto::with('categoria')->get(); // só categoria
         return view('produtos.index', compact('produtos'));
     }
 
     public function create()
     {
         $categorias = Categoria::all();
-        $usuarios = User::all();
-        return view('produtos.create', compact('categorias', 'usuarios'));
+        return view('produtos.create', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -27,9 +25,8 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|min:3',
             'preco' => 'required|numeric',
-            'quantidade' => 'required|integer',
+            'estoque' => 'required|integer',
             'categoria_id' => 'required|exists:categorias,id',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         Produto::create($request->all());
@@ -40,8 +37,7 @@ class ProdutoController extends Controller
     public function edit(Produto $produto)
     {
         $categorias = Categoria::all();
-        $usuarios = User::all();
-        return view('produtos.edit', compact('produto', 'categorias', 'usuarios'));
+        return view('produtos.edit', compact('produto', 'categorias'));
     }
 
     public function update(Request $request, Produto $produto)
@@ -49,9 +45,8 @@ class ProdutoController extends Controller
         $request->validate([
             'nome' => 'required|min:3',
             'preco' => 'required|numeric',
-            'quantidade' => 'required|integer',
+            'estoque' => 'required|integer',
             'categoria_id' => 'required|exists:categorias,id',
-            'user_id' => 'required|exists:users,id',
         ]);
 
         $produto->update($request->all());
@@ -64,4 +59,12 @@ class ProdutoController extends Controller
         $produto->delete();
         return redirect()->route('produtos.index')->with('success', 'Produto excluído!');
     }
+    public function home()
+    {
+        $categorias = Categoria::all(); // pega todas as categorias do banco
+        $produtos = Produto::all();     // pega todos os produtos do banco
+
+        return view('welcome', compact('categorias', 'produtos'));
+    }
+
 }

@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller; // Importa a classe base
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 

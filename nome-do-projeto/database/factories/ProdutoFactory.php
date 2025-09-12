@@ -2,27 +2,23 @@
 
 namespace Database\Factories;
 
+use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Produto>
- */
 class ProdutoFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = \App\Models\Produto::class;
+
     public function definition(): array
     {
+        $categoria = Categoria::inRandomOrder()->first() ?? Categoria::factory()->create();
+
         return [
-            'nome' => $this->faker->word(),
-            'preco' => $this->faker->randomFloat(2, 10, 1000),
-            'quantidade' => $this->faker->numberBetween(1, 50),
-            'user_id' => \App\Models\User::factory(),
-            'categoria_id' => \App\Models\Categoria::factory(),
+            'nome' => $this->faker->unique()->word().' Místico',
+            'descricao' => $this->faker->sentence(),
+            'preco' => $this->faker->randomFloat(2, 10, 100),
+            'imagem' => 'https://source.unsplash.com/400x300/?mystic,magic',
+            'categoria_id' => $categoria->id,
         ];
     }
-
 }
