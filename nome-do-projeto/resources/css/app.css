@@ -1,9 +1,6 @@
-/* Importa o Tailwind */
+/* Importa Tailwind */
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
-
-@import "bootstrap/dist/css/bootstrap.min.css";
 
 /* Fonte customizada */
 :root {
@@ -11,5 +8,5 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/* Importa o Bootstrap */
-@import 'bootstrap/dist/css/bootstrap.min.css';
+/* Importa o Bootstrap (uma vez é suficiente) */
+@import "bootstrap/dist/css/bootstrap.min.css";
