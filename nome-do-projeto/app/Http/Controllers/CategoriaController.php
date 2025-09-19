@@ -2,12 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller; // Importa a classe base
 use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
+    // LISTAGEM PÚBLICA DE ENTIDADES
+    public function publicIndex()
+    {
+        $linhas = Categoria::where('linha', 'linha')->get();
+        $orixas = Categoria::where('linha', 'orixa')->get();
+
+        return view('categorias.public', compact('linhas', 'orixas'));
+    }
+
+    // MOSTRAR DETALHES DE UMA CATEGORIA
+    public function show(Categoria $categoria)
+    {
+        return view('categorias.show', compact('categoria'));
+    }
+
+    // CRUD COMPLETO (pode ser acessado por todos por enquanto)
     public function index()
     {
         $categorias = Categoria::all();
@@ -22,12 +37,18 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|min:3',
+            'nome' => 'required|min:2',
+            'descricao' => 'nullable',
+            'imagem' => 'nullable|url',
+            'linha' => 'nullable',
+            'cores' => 'nullable',
+            'dia_semana' => 'nullable',
+            'historia' => 'nullable',
         ]);
 
         Categoria::create($request->all());
 
-        return redirect()->route('categorias.index')->with('success', 'Categoria criada com sucesso!');
+        return redirect()->route('categorias.index')->with('success', 'Categoria criada!');
     }
 
     public function edit(Categoria $categoria)
@@ -38,12 +59,18 @@ class CategoriaController extends Controller
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([
-            'nome' => 'required|min:3',
+            'nome' => 'required|min:2',
+            'descricao' => 'nullable',
+            'imagem' => 'nullable|url',
+            'linha' => 'nullable',
+            'cores' => 'nullable',
+            'dia_semana' => 'nullable',
+            'historia' => 'nullable',
         ]);
 
         $categoria->update($request->all());
 
-        return redirect()->route('categorias.index')->with('success', 'Categoria atualizada com sucesso!');
+        return redirect()->route('categorias.index')->with('success', 'Categoria atualizada!');
     }
 
     public function destroy(Categoria $categoria)

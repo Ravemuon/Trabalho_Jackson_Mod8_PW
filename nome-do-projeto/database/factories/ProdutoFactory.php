@@ -2,23 +2,22 @@
 
 namespace Database\Factories;
 
-use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Produto;
+use App\Models\Categoria; // <--- IMPORTAR AQUI
 
 class ProdutoFactory extends Factory
 {
-    protected $model = \App\Models\Produto::class;
+    protected $model = Produto::class;
 
-    public function definition(): array
+    public function definition()
     {
-        $categoria = Categoria::inRandomOrder()->first() ?? Categoria::factory()->create();
-
         return [
-            'nome' => $this->faker->unique()->word().' Místico',
-            'descricao' => $this->faker->sentence(),
-            'preco' => $this->faker->randomFloat(2, 10, 100),
+            'nome' => $this->faker->unique()->words(2, true),
+            'descricao' => $this->faker->sentence,
+            'preco' => $this->faker->randomFloat(2, 10, 200),
             'imagem' => 'https://source.unsplash.com/400x300/?mystic,magic',
-            'categoria_id' => $categoria->id,
+            'categoria_id' => Categoria::inRandomOrder()->first()->id,
         ];
     }
 }

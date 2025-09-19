@@ -3,17 +3,21 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Categoria;
+use App\Models\User;
+use App\Models\Categoria; // <--- IMPORTAR AQUI
 use App\Models\Produto;
 
 class DatabaseSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        // Cria categorias
-        Categoria::factory(4)->create();
+        // Usuários
+        // User::factory(10)->create();
 
-        // Cria produtos
-        Produto::factory(20)->create();
+        // Categorias
+        // Categoria::factory(5)->create();
+
+        // Produtos
+        // Produto::factory(20)->create();
     }
 }

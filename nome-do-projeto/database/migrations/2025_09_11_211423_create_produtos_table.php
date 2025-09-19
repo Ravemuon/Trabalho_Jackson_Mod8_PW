@@ -10,11 +10,20 @@ return new class extends Migration {
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
             $table->string('nome')->unique();
-            $table->text('descricao')->nullable();
+            $table->string('descricao');
             $table->decimal('preco', 8, 2);
             $table->string('imagem')->nullable();
-            $table->foreignId('categoria_id')->constrained()->onDelete('cascade');
+            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
             $table->timestamps();
+            $table->integer('estoque')->default(0);
+            $table->string('codigo')->nullable();
+            $table->decimal('peso', 8, 2)->nullable();
+            $table->string('dimensoes')->nullable();
+            $table->text('tags')->nullable();
+            $table->boolean('popular')->default(false);
+            $table->boolean('ativo')->default(true);
+            $table->text('observacoes')->nullable();
+
         });
     }
 

@@ -3,17 +3,17 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Categoria;
 
 class CategoriaFactory extends Factory
 {
-    protected $model = \App\Models\Categoria::class;
+    protected $model = Categoria::class;
 
-    public function definition(): array
+    public function definition()
     {
-        $nomes = ['Velas', 'Amuletos', 'Cristais', 'Imagens Religiosas'];
         return [
-            'nome' => $this->faker->unique()->randomElement($nomes),
-            'descricao' => $this->faker->sentence(),
+            'nome' => $this->faker->unique()->words(2, true),
+            'descricao' => $this->faker->sentence,
         ];
     }
 }

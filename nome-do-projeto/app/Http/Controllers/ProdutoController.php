@@ -2,16 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Categoria;
-use Illuminate\Http\Request;
 
 class ProdutoController extends Controller
 {
-    public function index()
+    // Página inicial (home)
+    public function home()
     {
-        $produtos = Produto::with('categoria')->get(); // só categoria
-        return view('produtos.index', compact('produtos'));
+        // Pega todas categorias e produtos para mostrar na home
+        $categorias = Categoria::all();
+        $produtos = Produto::all();
+
+        return view('welcome', compact('categorias', 'produtos'));
+
+        $query = Produto::query();
+
+        // Filtrar por categoria (quando clicado "Ver Produtos" em categoria)
+        if ($request->has('categoria') && $request->categoria != '') {
+            $query->where('categoria_id', $request->categoria);
+        }
+        // Filtrar por pesquisa
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nome', 'like', '%'.$request->search.'%');
+        }
+           $produtos = $query->with('categoria')->paginate(9)->withQueryString();
+
+
+        // Pesquisa por nome ou descrição
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nome', 'like', "%$search%")
+                  ->orWhere('descricao', 'like', "%$search%");
+            });
+        }
+
+        $produtos = $query->paginate(12);
+        $categorias = Categoria::all();
+
+        return view('produtos.index', compact('produtos', 'categorias'));
     }
 
     public function create()
@@ -24,14 +55,14 @@ class ProdutoController extends Controller
     {
         $request->validate([
             'nome' => 'required|min:3',
+            'descricao' => 'required',
             'preco' => 'required|numeric',
-            'estoque' => 'required|integer',
             'categoria_id' => 'required|exists:categorias,id',
+            'imagem' => 'nullable|url',
         ]);
 
         Produto::create($request->all());
-
-        return redirect()->route('produtos.index')->with('success', 'Produto cadastrado com sucesso!');
+        return redirect()->route('produtos.index')->with('success', 'Produto criado!');
     }
 
     public function edit(Produto $produto)
@@ -44,14 +75,14 @@ class ProdutoController extends Controller
     {
         $request->validate([
             'nome' => 'required|min:3',
+            'descricao' => 'required',
             'preco' => 'required|numeric',
-            'estoque' => 'required|integer',
             'categoria_id' => 'required|exists:categorias,id',
+            'imagem' => 'nullable|url',
         ]);
 
         $produto->update($request->all());
-
-        return redirect()->route('produtos.index')->with('success', 'Produto atualizado com sucesso!');
+        return redirect()->route('produtos.index')->with('success', 'Produto atualizado!');
     }
 
     public function destroy(Produto $produto)
@@ -59,12 +90,4 @@ class ProdutoController extends Controller
         $produto->delete();
         return redirect()->route('produtos.index')->with('success', 'Produto excluído!');
     }
-    public function home()
-    {
-        $categorias = Categoria::all(); // pega todas as categorias do banco
-        $produtos = Produto::all();     // pega todos os produtos do banco
-
-        return view('welcome', compact('categorias', 'produtos'));
-    }
-
 }
