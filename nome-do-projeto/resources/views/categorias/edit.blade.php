@@ -3,8 +3,12 @@
 @section('title', 'Editar Categoria')
 
 @section('content')
-<div class="container py-4">
-    <h1 class="text-light mb-4">Editar Categoria: {{ $categoria->nome }}</h1>
+<div class="container">
+    <h1 class="mb-4 text-umbanda text-center">Editar Categoria: {{ $categoria->nome }}</h1>
+
+    <div class="text-center mb-4">
+        <a href="{{ route('categorias.index') }}" class="btn btn-secondary btn-sm">← Voltar</a>
+    </div>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -16,85 +20,33 @@
         </div>
     @endif
 
-    <form action="{{ route('categorias.update', $categoria) }}" method="POST">
-        @csrf
-        @method('PUT')
+    <div class="card card-umbanda p-4 shadow-lg">
+        <form action="{{ route('categorias.update', $categoria->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-        <div class="mb-3">
-            <label class="form-label text-light">Nome</label>
-            <input type="text" name="nome" class="form-control" value="{{ old('nome', $categoria->nome) }}" required>
-        </div>
+            @php
+                $fields = [
+                    'nome','linha','descricao','imagem','cores','dia_semana','historia',
+                    'simbolos','saudacoes','personalidade','animais','elementos','datas_rituais','notas'
+                ];
+            @endphp
 
-        <div class="mb-3">
-            <label class="form-label text-light">Descrição</label>
-            <textarea name="descricao" class="form-control">{{ old('descricao', $categoria->descricao) }}</textarea>
-        </div>
+            @foreach($fields as $field)
+                <div class="mb-3">
+                    <label for="{{ $field }}" class="form-label text-umbanda fw-bold">{{ ucfirst(str_replace('_',' ',$field)) }}</label>
+                    @if(in_array($field, ['descricao','historia','notas']))
+                        <textarea name="{{ $field }}" id="{{ $field }}" class="form-control" rows="3">{{ old($field, $categoria->$field) }}</textarea>
+                    @else
+                        <input type="text" name="{{ $field }}" id="{{ $field }}" class="form-control" value="{{ old($field, $categoria->$field) }}">
+                    @endif
+                </div>
+            @endforeach
 
-        <div class="mb-3">
-            <label class="form-label text-light">Imagem (URL)</label>
-            <input type="url" name="imagem" class="form-control" value="{{ old('imagem', $categoria->imagem) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Linha/Orixá</label>
-            <select name="tipo" class="form-control" required>
-                <option value="orixa" {{ old('tipo', $categoria->tipo) == 'orixa' ? 'selected' : '' }}>Orixá</option>
-                <option value="linha" {{ old('tipo', $categoria->tipo) == 'linha' ? 'selected' : '' }}>Linha</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Cores</label>
-            <input type="text" name="cores" class="form-control" value="{{ old('cores', $categoria->cores) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Dia da Semana</label>
-            <input type="text" name="dia_semana" class="form-control" value="{{ old('dia_semana', $categoria->dia_semana) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">História</label>
-            <textarea name="historia" class="form-control">{{ old('historia', $categoria->historia) }}</textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Símbolos</label>
-            <input type="text" name="simbolos" class="form-control" value="{{ old('simbolos', $categoria->simbolos) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Saudações</label>
-            <input type="text" name="saudacoes" class="form-control" value="{{ old('saudacoes', $categoria->saudacoes) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Personalidade</label>
-            <input type="text" name="personalidade" class="form-control" value="{{ old('personalidade', $categoria->personalidade) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Animais</label>
-            <input type="text" name="animais" class="form-control" value="{{ old('animais', $categoria->animais) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Elementos</label>
-            <input type="text" name="elementos" class="form-control" value="{{ old('elementos', $categoria->elementos) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Datas/Rituais</label>
-            <input type="text" name="datas_rituais" class="form-control" value="{{ old('datas_rituais', $categoria->datas_rituais) }}">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label text-light">Notas</label>
-            <textarea name="notas" class="form-control">{{ old('notas', $categoria->notas) }}</textarea>
-        </div>
-
-        <button type="submit" class="btn btn-success">Salvar Alterações</button>
-        <a href="{{ route('categorias.show', $categoria) }}" class="btn btn-light">Cancelar</a>
-    </form>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-umbanda btn-lg">Atualizar Categoria</button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

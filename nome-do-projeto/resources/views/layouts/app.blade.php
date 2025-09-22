@@ -1,142 +1,150 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Altar Oculto')</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@yield('title', 'Altar Oculto')</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom Styles -->
-    <style>
-        /* Corpo e fonte */
-        body {
-            background: linear-gradient(180deg, #1b1b2a, #121121);
-            color: #e0dff8;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<!-- Custom Styles -->
+<style>
+    /* Corpo e fonte */
+    body {
+        background: linear-gradient(180deg, #f2f0f5, #e6e1eb);
+        color: #3d2b5f;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        a.nav-link {
-            color: #e0dff8 !important;
-            transition: color 0.3s;
-        }
+    /* Navbar */
+    .navbar {
+        background: #f7f5fb;
+        padding: 1rem 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
 
-        a.nav-link:hover {
-            color: #c297ff !important;
-        }
+    .navbar-brand {
+        color: #6b3fa0 !important;
+        font-weight: bold;
+        font-size: 1.6rem;
+    }
 
-        /* Navbar */
-        .navbar {
-            background-color: #251f3f;
-            padding: 1rem 1rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-        }
+    a.nav-link {
+        color: #4b2c91 !important;
+        transition: color 0.3s;
+    }
 
-        .navbar-brand {
-            color: #c297ff !important;
-            font-weight: bold;
-            font-size: 1.6rem;
-            text-shadow: 1px 1px 4px #000;
-        }
+    a.nav-link:hover {
+        color: #9c6cff !important;
+    }
 
-        /* Hero */
-        .hero {
-            background-color: rgba(40, 30, 60, 0.9);
-            padding: 70px 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 50px;
-            box-shadow: 0 0 20px rgba(125, 95, 255, 0.6);
-        }
+    /* Hero / Poster */
+    .hero {
+        background: url('https://i.pinimg.com/736x/6b/f4/9a/6bf49a0c607fe27907e95abc4e100ff1.jpg') center/cover no-repeat;
+        padding: 120px 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+        box-shadow: 0 0 25px rgba(107,63,160,0.25);
+    }
 
-        .hero h1 {
-            color: #c297ff;
-            font-weight: 900;
-            font-size: 3rem;
-            text-shadow: 2px 2px 8px #000;
-        }
+    .hero::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(255,255,255,0.6);
+        border-radius: 15px;
+    }
 
-        .hero p {
-            color: #e0dff8;
-            font-size: 1.2rem;
-        }
+    .hero h1, .hero p {
+        position: relative;
+        z-index: 1;
+        color: #4b2c91;
+        text-shadow: 1px 1px 4px #fff;
+    }
 
-        /* Cards */
-        .card-dark {
-            background-color: #2a243f;
-            color: #e0dff8;
-            border: 2px solid #c297ff;
-            border-radius: 12px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 900;
+    }
 
-        .card-dark:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(194, 151, 255, 0.6);
-        }
+    .hero p {
+        font-size: 1.3rem;
+        color: #3d2b5f;
+    }
 
-        .card-dark img {
-            border-bottom: 1px solid #c297ff;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
+    /* Cards */
+    .card-umbanda {
+        background: #fdfafc;
+        color: #3d2b5f;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(107,63,160,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-        /* Botões */
-        .btn-purple {
-            background-color: #c297ff;
-            color: #1b1b2a;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
-        }
+    .card-umbanda:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(107,63,160,0.25);
+    }
 
-        .btn-purple:hover {
-            background-color: #9c6cff;
-            color: #fff;
-            transform: scale(1.05);
-        }
+    .card-umbanda img {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
 
-        /* Footer */
-        footer {
-            background-color: #251f3f;
-            color: #c297ff;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-            padding: 1rem 0;
-        }
+    /* Botões */
+    .btn-umbanda {
+        background: linear-gradient(90deg, #6b3fa0, #9c6cff);
+        color: #fff;
+        font-weight: bold;
+        transition: background 0.3s, transform 0.2s;
+    }
 
-        footer p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
+    .btn-umbanda:hover {
+        background: linear-gradient(90deg, #fff, #6b3fa0);
+        color: #3d2b5f;
+        transform: scale(1.05);
+    }
 
-        /* Links especiais */
-        .text-purple {
-            color: #c297ff !important;
-        }
+    /* Footer */
+    footer {
+        background: #f7f5fb;
+        color: #6b3fa0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        padding: 1rem 0;
+    }
 
-        /* Cards responsivos */
-        .category-card {
-            margin-bottom: 30px;
-        }
+    /* Títulos */
+    h1, h2, h3, h4, h5 {
+        color: #6b3fa0;
+    }
 
-        .category-card img {
-            max-height: 220px;
-            object-fit: cover;
-        }
+    p, li, span {
+        color: #3d2b5f;
+    }
 
-        /* Scroll suave para links internos */
-        html {
-            scroll-behavior: smooth;
-        }
+    /* Seções */
+    .section-title {
+        margin-bottom: 30px;
+        text-align: center;
+    }
 
-    </style>
+    .section-title h2 {
+        font-weight: 700;
+        font-size: 2rem;
+        color: #6b3fa0;
+    }
 
-    @stack('styles')
+</style>
+@stack('styles')
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">Altar Oculto</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -153,6 +161,12 @@
         </div>
     </div>
 </nav>
+
+<!-- Hero -->
+<div class="hero mb-5">
+    <h1>Bem-vindo ao Altar Oculto</h1>
+    <p>Explore divindades, produtos e a magia da Umbanda</p>
+</div>
 
 <!-- Conteúdo principal -->
 <div class="container my-5">

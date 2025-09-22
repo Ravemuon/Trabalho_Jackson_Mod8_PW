@@ -1,59 +1,80 @@
 @extends('layouts.app')
 
-@section('title','Produtos')
+@section('title', 'Produtos')
 
 @section('content')
-<div class="container py-4">
-    <h1 class="text-light mb-4">Produtos</h1>
+<div class="container">
+    <h1 class="mb-4 text-umbanda text-center">Gerenciar Produtos</h1>
 
-    <!-- Formulário de filtro/pesquisa -->
-    <form method="GET" action="{{ route('produtos.index') }}" class="row mb-4">
-        <div class="col-md-4">
-            <input type="text" name="search" class="form-control" placeholder="Pesquisar por nome..." value="{{ request('search') }}">
-        </div>
-        <div class="col-md-4">
-            <select name="categoria" class="form-control">
-                <option value="">Todas as categorias</option>
-                @foreach($categorias as $categoria)
-                    <option value="{{ $categoria->id }}" {{ request('categoria') == $categoria->id ? 'selected' : '' }}>
-                        {{ $categoria->nome }}
+    {{-- Botões: Novo Produto + Pesquisar + Filtro --}}
+    <div class="d-flex justify-content-center mb-4 gap-3 flex-wrap">
+        <a href="{{ route('produtos.create') }}" class="btn btn-umbanda btn-lg shadow">+ Novo Produto</a>
+
+        <form action="{{ route('produtos.index') }}" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control" placeholder="Pesquisar produto..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-umbanda ms-2">Pesquisar</button>
+        </form>
+
+        <form action="{{ route('produtos.index') }}" method="GET" class="d-flex">
+            <select name="categoria" class="form-select">
+                <option value="">Filtrar por Categoria</option>
+                @foreach($categorias as $cat)
+                    <option value="{{ $cat->id }}" @if(request('categoria') == $cat->id) selected @endif>
+                        {{ $cat->nome }}
                     </option>
                 @endforeach
             </select>
-        </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-            <a href="{{ route('produtos.index') }}" class="btn btn-secondary">Limpar</a>
-        </div>
-    </form>
-
-    <div class="row">
-        @foreach($produtos as $produto)
-            <div class="col-md-4 mb-4">
-                <div class="card bg-dark text-light h-100">
-                    @if($produto->imagem)
-                        <img src="{{ $produto->imagem }}" class="card-img-top" style="height:200px; object-fit:cover;" alt="{{ $produto->nome }}">
-                    @endif
-                    <div class="card-body">
-                        <h5>{{ $produto->nome }}</h5>
-                        <p>{{ $produto->descricao }}</p>
-                        <p><strong>Preço:</strong> R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
-                        <p><strong>Categoria:</strong> {{ $produto->categoria->nome ?? '' }}</p>
-
-                        <!-- CRUD visível para todos -->
-                        <a href="{{ route('produtos.edit', $produto) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('produtos.destroy', $produto) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente excluir?')">Excluir</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+            <button type="submit" class="btn btn-umbanda ms-2">Filtrar</button>
+        </form>
     </div>
 
-    {{ $produtos->links('pagination::bootstrap-5') }}
-    <a href="{{ route('produtos.create') }}" class="btn btn-success mt-4">Criar Novo Produto</a>
+    @if(session('success'))
+        <div class="alert alert-success text-center">{{ session('success') }}</div>
+    @endif
+
+    {{-- Produtos Normais (Macumba) --}}
+    <section class="mb-5">
+        <h2 class="text-umbanda mb-4 section-title">Macumba</h2>
+        <div class="row g-4">
+            @foreach($produtos->whereNotIn('categoria.linha', ['ervas', 'pedras']) as $produto)
+                <div class="col-md-4 col-lg-3">
+                    @include('produtos.partials.card', ['produto' => $produto])
+                </div>
+            @endforeach
+            @if($produtos->whereNotIn('categoria.linha', ['ervas', 'pedras'])->isEmpty())
+                <p class="text-center w-100">Nenhum produto cadastrado.</p>
+            @endif
+        </div>
+    </section>
+
+    {{-- Ervas --}}
+    <section class="mb-5">
+        <h2 class="text-umbanda mb-4 section-title">Ervas</h2>
+        <div class="row g-4">
+            @foreach($produtos->where('categoria.linha', 'ervas') as $produto)
+                <div class="col-md-4 col-lg-3">
+                    @include('produtos.partials.card', ['produto' => $produto])
+                </div>
+            @endforeach
+            @if($produtos->where('categoria.linha', 'ervas')->isEmpty())
+                <p class="text-center w-100">Nenhuma erva cadastrada.</p>
+            @endif
+        </div>
+    </section>
+
+    {{-- Pedras e Cristais --}}
+    <section class="mb-5">
+        <h2 class="text-umbanda mb-4 section-title">Pedras e Cristais</h2>
+        <div class="row g-4">
+            @foreach($produtos->where('categoria.linha', 'pedras') as $produto)
+                <div class="col-md-4 col-lg-3">
+                    @include('produtos.partials.card', ['produto' => $produto])
+                </div>
+            @endforeach
+            @if($produtos->where('categoria.linha', 'pedras')->isEmpty())
+                <p class="text-center w-100">Nenhuma pedra cadastrada.</p>
+            @endif
+        </div>
+    </section>
 </div>
 @endsection

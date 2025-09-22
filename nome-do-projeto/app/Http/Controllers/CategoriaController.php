@@ -55,7 +55,6 @@ class CategoriaController extends Controller
     {
         return view('categorias.edit', compact('categoria'));
     }
-
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([
