@@ -4,63 +4,63 @@
 
 @section('content')
 
-<!-- Carrossel de Categorias -->
+<!-- Categorias Recentes -->
 <section class="mb-5">
-    <h2 class="text-umbanda mb-4 section-title">Categorias Recentes</h2>
-    <div id="carouselCategorias" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @foreach($categorias->chunk(3) as $chunkIndex => $chunk)
-                <div class="carousel-item @if($chunkIndex==0) active @endif">
-                    <div class="d-flex justify-content-center gap-4 flex-wrap">
-                        @foreach($chunk as $categoria)
-                            <div class="card card-umbanda text-center" style="width: 18rem;">
-                                <img src="{{ $categoria->imagem ?? 'https://via.placeholder.com/300x200.png?text='.$categoria->nome }}"
-                                     class="card-img-top" alt="{{ $categoria->nome }}" style="height: 200px; object-fit: cover;">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title text-umbanda">{{ $categoria->nome }}</h5>
-                                    <a href="{{ route('produtos.index') }}?categoria={{ $categoria->id }}"
-                                       class="btn btn-umbanda btn-sm mt-auto">Ver Produtos</a>
-                                </div>
+    <h2 class="text-umbanda mb-4 section-title">Categorias</h2>
+    <div class="d-flex flex-wrap gap-3 justify-content-center">
+        @foreach($categorias as $categoria)
+            <a href="{{ route('produtos.index') }}?categoria={{ $categoria->id }}"
+               class="btn btn-outline-umbanda fw-bold px-4 py-2 text-nowrap">
+                {{ $categoria->nome }}
+            </a>
+        @endforeach
+    </div>
+</section>
+
+<!-- Produtos por Categoria -->
+@foreach($categorias as $categoria)
+    @php
+        $produtosCategoria = $produtos->where('categoria_id', $categoria->id);
+    @endphp
+
+    @if($produtosCategoria->count() > 0)
+        <section class="mb-5">
+            <h2 class="text-umbanda mb-4 section-title">{{ $categoria->nome }}</h2>
+            <div id="carouselCategoria{{ $categoria->id }}" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach($produtosCategoria->chunk(4) as $chunkIndex => $chunk)
+                        <div class="carousel-item @if($chunkIndex==0) active @endif">
+                            <div class="row justify-content-center">
+                                @foreach($chunk as $produto)
+                                    <div class="col-6 col-md-3 mb-3">
+                                        <div class="card card-umbanda text-center h-100">
+                                            <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/300x200.png?text='.$produto->nome }}"
+                                                 class="card-img-top" alt="{{ $produto->nome }}" style="height: 160px; object-fit: cover;">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-umbanda">{{ $produto->nome }}</h5>
+                                                <p class="card-text fw-bold text-umbanda" style="color:#6b3fa0;">
+                                                    R$ {{ number_format($produto->preco,2,",",".") }}
+                                                </p>
+                                                <a href="{{ route('produtos.show', $produto) }}" class="btn btn-umbanda btn-sm mt-auto">Ver Detalhes</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategorias" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselCategorias" data-bs-slide="next">
-            <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
-        </button>
-    </div>
-</section>
-
-<!-- Produtos Normais (excluindo Ervas e Pedras) -->
-<section class="mb-5">
-    <h2 class="text-umbanda mb-4 section-title">Produtos</h2>
-    <div class="d-flex justify-content-center flex-wrap gap-4">
-        @php
-            $produtosNormais = $produtos->reject(function($item) {
-                return in_array($item->categoria->linha ?? '', ['ervas', 'pedras']);
-            });
-        @endphp
-
-        @forelse($produtosNormais as $produto)
-            <div class="card card-umbanda text-center" style="width: 18rem; height: 320px;">
-                <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/300x200.png?text='.$produto->nome }}"
-                     class="card-img-top" alt="{{ $produto->nome }}" style="height: 160px; object-fit: cover;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-umbanda">{{ $produto->nome }}</h5>
-                    <p class="card-text fw-bold text-umbanda" style="color:#6b3fa0;">R$ {{ number_format($produto->preco,2,",",".") }}</p>
-                    <a href="{{ route('produtos.show', $produto) }}" class="btn btn-umbanda btn-sm mt-auto">Ver Detalhes</a>
-                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
+                </button>
             </div>
-        @empty
-            <p class="text-center w-100">Nenhum produto disponível.</p>
-        @endforelse
-    </div>
-</section>
+        </section>
+    @endif
+@endforeach
+
 
 <!-- História dos Orixás -->
 <section class="mb-5">
@@ -76,40 +76,6 @@
                             <p class="text-umbanda fw-bold text-center mt-auto">Pontos: {{ $orixa->pontos_cantados }}</p>
                         @endif
                     </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</section>
-
-<!-- Área de Ervas -->
-<section class="mb-5">
-    <h2 class="text-umbanda mb-4 section-title">Ervas</h2>
-    <div class="d-flex justify-content-center flex-wrap gap-3">
-        @foreach($categorias->where('linha', 'ervas') as $erva)
-            <div class="card card-umbanda text-center" style="width: 14rem;">
-                <img src="{{ $erva->imagem }}" class="card-img-top" alt="{{ $erva->nome }}" style="height: 140px; object-fit: cover; border-radius: 6px;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-umbanda">{{ $erva->nome }}</h5>
-                    <p class="card-text">{{ $erva->descricao }}</p>
-                    <a href="{{ route('categorias.show', $erva) }}" class="btn btn-purple mt-auto">Ver Produtos</a>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</section>
-
-<!-- Área de Pedras -->
-<section class="mb-5">
-    <h2 class="text-umbanda mb-4 section-title">Pedras e Cristais</h2>
-    <div class="d-flex justify-content-center flex-wrap gap-3">
-        @foreach($categorias->where('linha', 'pedras') as $pedra)
-            <div class="card card-umbanda text-center" style="width: 14rem;">
-                <img src="{{ $pedra->imagem }}" class="card-img-top" alt="{{ $pedra->nome }}" style="height: 140px; object-fit: cover; border-radius: 6px;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-umbanda">{{ $pedra->nome }}</h5>
-                    <p class="card-text">{{ $pedra->descricao }}</p>
-                    <a href="{{ route('categorias.show', $pedra) }}" class="btn btn-purple mt-auto">Ver Produtos</a>
                 </div>
             </div>
         @endforeach
