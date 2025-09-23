@@ -32,47 +32,30 @@
         <div class="alert alert-success text-center">{{ session('success') }}</div>
     @endif
 
-    {{-- Produtos Normais (Macumba) --}}
+    {{-- Produtos Normais --}}
     <section class="mb-5">
-        <h2 class="text-umbanda mb-4 section-title">Macumba</h2>
+        <h2 class="text-umbanda mb-4 section-title">Gerais</h2>
         <div class="row g-4">
             @foreach($produtos->whereNotIn('categoria.linha', ['ervas', 'pedras']) as $produto)
                 <div class="col-md-4 col-lg-3">
-                    @include('produtos.partials.card', ['produto' => $produto])
+                    <div class="card card-umbanda text-center h-100">
+                        <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/150' }}" class="card-img-top" alt="{{ $produto->nome }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $produto->nome }}</h5>
+                            <p class="card-text">{{ $produto->descricao }}</p>
+                            <p><strong>Preço:</strong> R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
+                            <a href="{{ route('produtos.edit', $produto->id) }}" class="btn btn-sm btn-warning">Editar</a>
+                            <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             @endforeach
             @if($produtos->whereNotIn('categoria.linha', ['ervas', 'pedras'])->isEmpty())
                 <p class="text-center w-100">Nenhum produto cadastrado.</p>
-            @endif
-        </div>
-    </section>
-
-    {{-- Ervas --}}
-    <section class="mb-5">
-        <h2 class="text-umbanda mb-4 section-title">Ervas</h2>
-        <div class="row g-4">
-            @foreach($produtos->where('categoria.linha', 'ervas') as $produto)
-                <div class="col-md-4 col-lg-3">
-                    @include('produtos.partials.card', ['produto' => $produto])
-                </div>
-            @endforeach
-            @if($produtos->where('categoria.linha', 'ervas')->isEmpty())
-                <p class="text-center w-100">Nenhuma erva cadastrada.</p>
-            @endif
-        </div>
-    </section>
-
-    {{-- Pedras e Cristais --}}
-    <section class="mb-5">
-        <h2 class="text-umbanda mb-4 section-title">Pedras e Cristais</h2>
-        <div class="row g-4">
-            @foreach($produtos->where('categoria.linha', 'pedras') as $produto)
-                <div class="col-md-4 col-lg-3">
-                    @include('produtos.partials.card', ['produto' => $produto])
-                </div>
-            @endforeach
-            @if($produtos->where('categoria.linha', 'pedras')->isEmpty())
-                <p class="text-center w-100">Nenhuma pedra cadastrada.</p>
             @endif
         </div>
     </section>
