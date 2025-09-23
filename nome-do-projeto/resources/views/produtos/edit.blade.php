@@ -83,16 +83,19 @@
             </div>
 
             <div class="col-md-6 form-check">
-                <input type="checkbox" class="form-check-input" name="popular" id="popular"
+                <input type="hidden" name="popular" value="0">
+                <input type="checkbox" class="form-check-input" name="popular" id="popular" value="1"
                     @if(isset($produto) && $produto->popular) checked @endif>
                 <label class="form-check-label" for="popular">Produto Popular</label>
             </div>
 
             <div class="col-md-6 form-check">
-                <input type="checkbox" class="form-check-input" name="ativo" id="ativo"
+                <input type="hidden" name="ativo" value="0">
+                <input type="checkbox" class="form-check-input" name="ativo" id="ativo" value="1"
                     @if(isset($produto) && $produto->ativo) checked @endif>
                 <label class="form-check-label" for="ativo">Produto Ativo</label>
             </div>
+
 
             <div class="col-md-12">
                 <label class="form-label">Observações</label>
