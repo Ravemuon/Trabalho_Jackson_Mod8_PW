@@ -39,6 +39,8 @@ Route::post('/contato', [ContatoController::class, 'store'])->name('contato.stor
 Route::resource('encomendas', EncomendaController::class);
 // rotas para listar, criar, editar e excluir encomendas
 
+Route::delete('/encomendas/{encomenda}/item/{produto}', [EncomendaController::class, 'removerItem'])->name('encomendas.removerItem');
+
 // -----------------------------
 // CARRINHO (sessão)
 // -----------------------------

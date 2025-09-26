@@ -62,7 +62,7 @@
 
                         {{-- Imagem do orixá --}}
                         @if($orixa->imagem)
-                            <img src="{{ $orixa->imagem }}"  class="img-fluid shadow-lg rounded-4" alt="{{ $orixa->nome }}" style="height:300px; object-fit:cover;">
+                            <img src="{{ $orixa->imagem }}"  class="img-fluid shadow-lg rounded-4" alt="{{ $orixa->nome }}" style="height:450px; object-fit:cover;">
                         @else
                             <div class="bg-light d-flex align-items-center justify-content-center" style="height:300px;">
                                 <span class="text-muted">Sem imagem</span>
@@ -73,7 +73,7 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-umbanda fw-bold text-center">{{ $orixa->nome }}</h5>
                             <p class="card-text small">{{ Str::limit($orixa->historia, 120, '...') }}</p>
-                            
+
                             <div class="text-center mt-2">
                                 <span class="text-umbanda fw-bold">Leia mais...</span>
                             </div>

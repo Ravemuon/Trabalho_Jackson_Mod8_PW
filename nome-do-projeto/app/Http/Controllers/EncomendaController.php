@@ -119,5 +119,18 @@ class EncomendaController extends Controller
         $encomenda->delete(); // remove do banco
         return redirect()->route('encomendas.index')->with('success', 'Encomenda excluída!');
     }
+    // REMOVER ITEM
+        public function removerItem($encomendaId, $produtoId)
+    {
+        $item = EncomendaItem::where('encomenda_id', $encomendaId)
+                            ->where('produto_id', $produtoId)
+                            ->first();
+
+        if ($item) {
+            $item->delete();
+        }
+
+        return redirect()->back()->with('success', 'Item removido com sucesso!');
+    }
+
 }
- 

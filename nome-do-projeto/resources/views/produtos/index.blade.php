@@ -50,9 +50,9 @@
                                     @foreach($chunk as $produto)
                                         <div class="col-12 col-md-4 mb-4">
                                             <div class="card card-umbanda text-center h-100 shadow-sm">
-                                                <!-- Imagem maior do produto -->
+                                                <!-- Imagem do produto -->
                                                 <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/500x400.png?text='.$produto->nome }}"
-                                                     class="card-img-top" alt="{{ $produto->nome }}" style="height: 350px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
+                                                     class="card-img-top" alt="{{ $produto->nome }}" style="height: 450px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
                                                 <div class="card-body d-flex flex-column">
                                                     <h5 class="card-title text-umbanda">{{ $produto->nome }}</h5>
                                                     <p class="card-text fw-bold text-umbanda" style="color:#6b3fa0; font-size:1.2rem;">
