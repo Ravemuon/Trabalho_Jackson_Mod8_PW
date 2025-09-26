@@ -6,25 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // CRIA TABELA USUÁRIOS
     public function up(): void
     {
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->enum('tipo', ['cliente','admin'])->default('cliente');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->id(); // id automático
+            $table->string('name'); // nome do usuário
+            $table->string('email')->unique(); // email único
+            $table->string('password'); // senha criptografada
+            $table->enum('tipo', ['cliente','admin'])->default('cliente'); // tipo de usuário
+            $table->rememberToken(); // token para lembrar login
+            $table->timestamps(); // created_at e updated_at
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    // REMOVE TABELA USUÁRIOS
     public function down(): void
     {
         Schema::dropIfExists('usuarios');

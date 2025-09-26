@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory; // <--- adicionar
+use Illuminate\Database\Eloquent\Factories\HasFactory; // permite usar factories
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable; // <--- adicionar HasFactory aqui
+    use HasFactory, Notifiable; // adiciona HasFactory para testes e Notifiable para notificações
 
-    protected $table = 'usuarios';
+    protected $table = 'usuarios'; // define nome da tabela
 
+    // CAMPOS QUE PODEM SER PREENCHIDOS EM MASSA
     protected $fillable = [
         'name',
         'email',
@@ -19,6 +20,7 @@ class User extends Authenticatable
         'tipo',
     ];
 
+    // CAMPOS OCULTOS
     protected $hidden = [
         'password',
         'remember_token',

@@ -1,12 +1,18 @@
-/* Importa Tailwind */
+/* ----------------------------- */
+/* IMPORTA TAILWIND */
+/* ----------------------------- */
 @tailwind base;
 @tailwind components;
 
-/* Fonte customizada */
+/* ----------------------------- */
+/* FONTE CUSTOMIZADA */
+/* ----------------------------- */
 :root {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-/* Importa o Bootstrap (uma vez é suficiente) */
+/* ----------------------------- */
+/* IMPORTA BOOTSTRAP (UMA VEZ É SUFICIENTE) */
+/* ----------------------------- */
 @import "bootstrap/dist/css/bootstrap.min.css";

@@ -5,12 +5,13 @@
 @section('content')
 <div class="container">
 
+    <!-- Título principal -->
     <h1 class="mb-4 text-center fw-bold" style="color: #000;">🛒 Finalizar Pedido</h1>
 
-    @php $carrinho = session('carrinho', []); @endphp
+    @php $carrinho = session('carrinho', []); @endphp <!-- Pega o carrinho da sessão -->
 
     @if(count($carrinho) > 0)
-        {{-- Itens do carrinho --}}
+        <!-- Tabela com itens do carrinho -->
         <div class="table-responsive mb-4">
             <table class="table table-light table-hover align-middle shadow rounded-3 overflow-hidden">
                 <thead class="bg-secondary text-light">
@@ -43,11 +44,10 @@
             </table>
         </div>
 
-        {{-- Formulário de cliente --}}
+        <!-- Formulário para informações do cliente -->
         <form action="{{ route('encomendas.store') }}" method="POST">
             @csrf
-
-            <h2 class="fw-bold mb-3" style="color: #000;">📋 Informações do Cliente</h2>
+            <h2 class="fw-bold mb-3" style="color: #000;"> Informações do Cliente</h2>
 
             <div class="mb-3">
                 <label style="color: #000;">Nome do Cliente</label>
@@ -69,9 +69,10 @@
                 <textarea name="observacoes" class="form-control">{{ old('observacoes') }}</textarea>
             </div>
 
+            <!-- Total do pedido -->
             <input type="hidden" name="total" value="{{ $total }}">
 
-            {{-- Enviar itens do carrinho --}}
+            <!-- Enviar itens do carrinho para o backend -->
             @foreach($carrinho as $id => $item)
                 <input type="hidden" name="produtos[{{ $id }}][produto_id]" value="{{ $id }}">
                 <input type="hidden" name="produtos[{{ $id }}][quantidade]" value="{{ $item['quantidade'] }}">
@@ -80,7 +81,7 @@
             <button type="submit" class="btn btn-success w-100 btn-lg">✅ Finalizar Pedido</button>
         </form>
 
-        {{-- Sugestões de produtos --}}
+        <!-- Sugestões de produtos -->
         @isset($produtos)
             <h2 class="mt-5 fw-bold" style="color: #000;">🌿 Sugestões para você</h2>
             <div class="row g-4">
@@ -112,8 +113,9 @@
         @endisset
 
     @else
+        <!-- Mensagem quando o carrinho está vazio -->
         <p class="text-center fw-bold" style="color: #000;">⚠ Seu carrinho está vazio.</p>
-        <a href="{{ route('produtos.index') }}" class="btn btn-primary w-100 btn-lg mt-3">🛍️ Voltar às Compras</a>
+        <a href="{{ route('produtos.index') }}" class="btn btn-primary w-100 btn-lg mt-3"> Voltar às Compras</a>
     @endif
 
 </div>

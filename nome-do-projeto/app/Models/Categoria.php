@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    use HasFactory;
+    use HasFactory; // permite usar factories do Laravel
 
+    // CAMPOS QUE PODEM SER PREENCHIDOS EM MASSA
     protected $fillable = [
         'nome',
         'descricao',
@@ -26,6 +27,7 @@ class Categoria extends Model
         'notas'
     ];
 
+    // RELAÇÃO COM PRODUTOS (uma categoria tem muitos produtos)
     public function produtos()
     {
         return $this->hasMany(Produto::class);

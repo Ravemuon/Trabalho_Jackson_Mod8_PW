@@ -4,7 +4,7 @@
 
 @section('content')
 
-<!-- Categorias -->
+<!-- Categorias: mostra os botões com todas as categorias -->
 <section class="mb-5">
     <h2 class="text-umbanda mb-4 section-title">Categorias</h2>
     <div class="d-flex flex-wrap gap-3 justify-content-center">
@@ -17,7 +17,7 @@
     </div>
 </section>
 
-<!-- Itens Recentes (Produtos) -->
+<!-- Itens Recentes: mostra produtos recentes com imagem e descrição curta -->
 <section class="mb-5">
     <h2 class="text-umbanda mb-4 section-title">Itens Recentes</h2>
     <div class="row g-4">
@@ -26,7 +26,7 @@
                 <a href="{{ route('produtos.show', $produto->id) }}" class="text-decoration-none text-dark">
                     <div class="card card-umbanda h-100 shadow-sm rounded-4 overflow-hidden hover-shadow">
 
-                        {{-- Imagem --}}
+                        {{-- Imagem do produto --}}
                         @if($produto->imagem)
                             <img src="{{ $produto->imagem }}" class="card-img-top" alt="{{ $produto->nome }}" style="height:350px; object-fit:cover;">
                         @else
@@ -51,7 +51,7 @@
     </div>
 </section>
 
-<!-- História dos Orixás -->
+<!-- História dos Orixás: mostra cards das categorias com linha 'orixa' -->
 <section class="mb-5">
     <h2 class="text-umbanda mb-4 section-title">História dos Orixás</h2>
     <div class="row g-4">
@@ -60,7 +60,7 @@
                 <a href="{{ route('categorias.show', $orixa->id) }}" class="text-decoration-none text-dark">
                     <div class="card card-umbanda h-100 shadow-sm rounded-4 overflow-hidden hover-shadow">
 
-                        {{-- Imagem --}}
+                        {{-- Imagem do orixá --}}
                         @if($orixa->imagem)
                             <img src="{{ $orixa->imagem }}"  class="img-fluid shadow-lg rounded-4" alt="{{ $orixa->nome }}" style="height:300px; object-fit:cover;">
                         @else
@@ -73,12 +73,7 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-umbanda fw-bold text-center">{{ $orixa->nome }}</h5>
                             <p class="card-text small">{{ Str::limit($orixa->historia, 120, '...') }}</p>
-
-                            {{-- Pontos cantados --}}
-                            @if(!empty($orixa->pontos_cantados))
-                                <p class="text-umbanda fw-bold text-center mt-auto mb-1">Pontos: {{ $orixa->pontos_cantados }}</p>
-                            @endif
-
+                            
                             <div class="text-center mt-2">
                                 <span class="text-umbanda fw-bold">Leia mais...</span>
                             </div>
@@ -91,7 +86,7 @@
     </div>
 </section>
 
-<!-- História das Linhas -->
+<!-- História das Linhas: mostra cards das categorias com linha 'linha' -->
 <section class="mb-5">
     <h2 class="text-umbanda mb-4 section-title">História das Linhas</h2>
     <div class="row g-4">
@@ -100,7 +95,7 @@
                 <a href="{{ route('categorias.show', $linha->id) }}" class="text-decoration-none text-dark">
                     <div class="card card-umbanda h-100 shadow-sm rounded-4 overflow-hidden hover-shadow">
 
-                        {{-- Imagem --}}
+                        {{-- Imagem da linha --}}
                         @if($linha->imagem)
                             <img src="{{ $linha->imagem }}"  class="img-fluid shadow-lg rounded-4"  alt="{{ $linha->nome }}" style="height:300px; object-fit:cover;">
                         @else

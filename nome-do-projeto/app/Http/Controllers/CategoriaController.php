@@ -7,43 +7,45 @@ use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    // LISTAGEM PÚBLICA DE ENTIDADES
+    // LISTAGEM PÚBLICA DE ENTIDADES (linhas e orixás)
     public function publicIndex()
     {
-        $linhas = Categoria::where('linha', 'linha')->get();
-        $orixas = Categoria::where('linha', 'orixa')->get();
+        $linhas = Categoria::where('linha', 'linha')->get(); // pega categorias da linha
+        $orixas = Categoria::where('linha', 'orixa')->get(); // pega categorias de orixá
 
-        return view('categorias.public', compact('linhas', 'orixas'));
+        return view('categorias.public', compact('linhas', 'orixas')); // manda pro front
     }
 
     // MOSTRAR DETALHES DE UMA CATEGORIA
     public function show(Categoria $categoria)
     {
-        return view('categorias.show', compact('categoria'));
+        return view('categorias.show', compact('categoria')); // exibe detalhes de uma categoria
     }
 
-    // CRUD COMPLETO (pode ser acessado por todos por enquanto)
+    // LISTAGEM COMPLETA (CRUD, pesquisa)
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search'); // pega termo de pesquisa
 
-        $query = Categoria::query();
+        $query = Categoria::query(); // inicia query
 
         if ($search) {
             $query->where('nome', 'like', "%{$search}%")
-                  ->orWhere('descricao', 'like', "%{$search}%");
+                  ->orWhere('descricao', 'like', "%{$search}%"); // filtra por nome ou descrição
         }
 
-        $categorias = $query->orderBy('linha')->get();
+        $categorias = $query->orderBy('linha')->get(); // ordena por linha
 
-        return view('categorias.index', compact('categorias'));
+        return view('categorias.index', compact('categorias')); // manda pro front
     }
 
+    // FORMULÁRIO DE CRIAÇÃO
     public function create()
     {
-        return view('categorias.create');
+        return view('categorias.create'); // mostra formulário
     }
 
+    // SALVAR NOVA CATEGORIA
     public function store(Request $request)
     {
         $request->validate([
@@ -54,18 +56,20 @@ class CategoriaController extends Controller
             'cores' => 'nullable',
             'dia_semana' => 'nullable',
             'historia' => 'nullable',
-        ]);
+        ]); // valida dados
 
-        Categoria::create($request->all());
+        Categoria::create($request->all()); // cria no banco
 
-        return redirect()->route('categorias.index')->with('success', 'Categoria criada!');
+        return redirect()->route('categorias.index')->with('success', 'Categoria criada!'); // volta e mostra msg
     }
 
+    // FORMULÁRIO DE EDIÇÃO
     public function edit(Categoria $categoria)
     {
-        return view('categorias.edit', compact('categoria'));
+        return view('categorias.edit', compact('categoria')); // mostra formulário com dados atuais
     }
 
+    // ATUALIZAR CATEGORIA
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([
@@ -76,16 +80,17 @@ class CategoriaController extends Controller
             'cores' => 'nullable',
             'dia_semana' => 'nullable',
             'historia' => 'nullable',
-        ]);
+        ]); // valida dados
 
-        $categoria->update($request->all());
+        $categoria->update($request->all()); // atualiza no banco
 
-        return redirect()->route('categorias.index')->with('success', 'Categoria atualizada!');
+        return redirect()->route('categorias.index')->with('success', 'Categoria atualizada!'); // volta e mostra msg
     }
 
+    // DELETAR CATEGORIA
     public function destroy(Categoria $categoria)
     {
-        $categoria->delete();
-        return redirect()->route('categorias.index')->with('success', 'Categoria excluída!');
+        $categoria->delete(); // remove do banco
+        return redirect()->route('categorias.index')->with('success', 'Categoria excluída!'); // volta e mostra msg
     }
 }

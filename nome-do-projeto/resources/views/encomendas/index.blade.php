@@ -12,6 +12,7 @@
         </div>
         <div class="card-body bg-light text-black">
             @if(session('carrinho') && count(session('carrinho')) > 0)
+                {{-- Tabela com produtos do carrinho --}}
                 <div class="table-responsive mb-4">
                     <table class="table table-striped table-hover align-middle rounded-3 overflow-hidden">
                         <thead style="background-color: #FFD700; color: #000;">
@@ -26,13 +27,17 @@
                         <tbody>
                             @php $total = 0; @endphp
                             @foreach(session('carrinho') as $id => $item)
-                                @php $subtotal = $item['preco'] * $item['quantidade']; $total += $subtotal; @endphp
+                                @php
+                                    $subtotal = $item['preco'] * $item['quantidade'];
+                                    $total += $subtotal;
+                                @endphp
                                 <tr style="color: #000;">
                                     <td>{{ $item['nome'] }}</td>
                                     <td>R$ {{ number_format($item['preco'], 2, ',', '.') }}</td>
                                     <td>{{ $item['quantidade'] }}</td>
                                     <td>R$ {{ number_format($subtotal, 2, ',', '.') }}</td>
                                     <td class="text-center">
+                                        {{-- Botão para remover item --}}
                                         <form action="{{ route('carrinho.remover', $id) }}" method="POST" class="d-inline-block">
                                             @csrf
                                             <button type="submit" class="btn btn-danger btn-sm rounded-pill">🗑 Remover</button>
@@ -40,6 +45,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            {{-- Linha do total --}}
                             <tr style="background-color: #FFD700; color: #000; font-weight:bold;">
                                 <td colspan="3" class="text-end">TOTAL</td>
                                 <td colspan="2">R$ {{ number_format($total, 2, ',', '.') }}</td>
@@ -48,6 +54,7 @@
                     </table>
                 </div>
 
+                {{-- Botão para finalizar encomenda --}}
                 <div class="text-end">
                     <a href="{{ route('encomendas.create') }}" class="btn btn-success btn-lg rounded-pill shadow">
                         ✅ Finalizar Encomenda
@@ -75,6 +82,7 @@
                             <p class="fw-bold mb-1">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
                             <p class="small">Estoque: {{ $produto->estoque }}</p>
 
+                            {{-- Botão para adicionar produto ao carrinho --}}
                             <div class="mt-auto">
                                 <form action="{{ route('carrinho.adicionar', $produto->id) }}" method="POST">
                                     @csrf
@@ -122,8 +130,10 @@
                                 </td>
                                 <td>R$ {{ number_format($encomenda->total, 2, ',', '.') }}</td>
                                 <td class="text-center">
+                                    {{-- Botão para editar --}}
                                     <a href="{{ route('encomendas.edit', $encomenda) }}"
                                        class="btn btn-warning btn-sm rounded-pill">✏ Editar</a>
+                                    {{-- Botão para excluir --}}
                                     <form action="{{ route('encomendas.destroy', $encomenda) }}" method="POST" class="d-inline-block">
                                         @csrf
                                         @method('DELETE')
@@ -133,7 +143,9 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="text-center" style="color: #000;">⚠ Nenhuma encomenda realizada.</td></tr>
+                            <tr>
+                                <td colspan="5" class="text-center" style="color: #000;">⚠ Nenhuma encomenda realizada.</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

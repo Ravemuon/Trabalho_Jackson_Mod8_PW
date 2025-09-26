@@ -1,13 +1,13 @@
 @extends('layouts.app')
-
 @section('title', 'Produtos')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4 text-umbanda text-center">Gerenciar Produtos</h1>
+    <!-- Título da página -->
+    <h1 class="mb-5 text-umbanda text-center">Gerenciar Produtos</h1>
 
-    {{-- Botões: Novo Produto + Pesquisar + Filtro --}}
-    <div class="d-flex justify-content-center mb-4 gap-3 flex-wrap">
+    {{-- Seção de botões: Novo Produto, Pesquisar e Filtrar --}}
+    <div class="d-flex justify-content-center mb-5 gap-3 flex-wrap">
         <a href="{{ route('produtos.create') }}" class="btn btn-umbanda btn-lg shadow">+ Novo Produto</a>
 
         <form action="{{ route('produtos.index') }}" method="GET" class="d-flex">
@@ -32,56 +32,66 @@
         <div class="alert alert-success text-center">{{ session('success') }}</div>
     @endif
 
-<!-- Produtos por Categoria -->
-@foreach($categorias as $categoria)
-    @php
-        $produtosCategoria = $produtos->where('categoria_id', $categoria->id);
-    @endphp
+    {{-- Exibição dos produtos agrupados por categoria --}}
+    @foreach($categorias as $categoria)
+        @php
+            $produtosCategoria = $produtos->where('categoria_id', $categoria->id);
+        @endphp
 
-    @if($produtosCategoria->count() > 0)
-        <section class="mb-5">
-            <h2 class="text-umbanda mb-4 section-title">{{ $categoria->nome }}</h2>
-            <div id="carouselCategoria{{ $categoria->id }}" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach($produtosCategoria->chunk(4) as $chunkIndex => $chunk)
-                        <div class="carousel-item @if($chunkIndex==0) active @endif">
-                            <div class="row justify-content-center">
-                                @foreach($chunk as $produto)
-                                    <div class="col-6 col-md-3 mb-3">
-                                        <div class="card card-umbanda text-center h-100">
-                                            <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/300x200.png?text='.$produto->nome }}"
-                                                 class="card-img-top" alt="{{ $produto->nome }}" style="height: 160px; object-fit: cover;">
-                                            <div class="card-body d-flex flex-column">
-                                                <h5 class="card-title text-umbanda">{{ $produto->nome }}</h5>
-                                                <p class="card-text fw-bold text-umbanda" style="color:#6b3fa0;">
-                                                    R$ {{ number_format($produto->preco,2,",",".") }}
-                                                </p>
-                                                <a href="{{ route('produtos.show', $produto) }}" class="btn btn-umbanda btn-sm mt-auto">Ver Detalhes</a>
+        @if($produtosCategoria->count() > 0)
+            <section class="mb-5">
+                <h2 class="text-umbanda mb-4 section-title">{{ $categoria->nome }}</h2>
+
+                <div id="carouselCategoria{{ $categoria->id }}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach($produtosCategoria->chunk(3) as $chunkIndex => $chunk)
+                            <div class="carousel-item @if($chunkIndex==0) active @endif">
+                                <div class="row justify-content-center">
+                                    @foreach($chunk as $produto)
+                                        <div class="col-12 col-md-4 mb-4">
+                                            <div class="card card-umbanda text-center h-100 shadow-sm">
+                                                <!-- Imagem maior do produto -->
+                                                <img src="{{ $produto->imagem ?? 'https://via.placeholder.com/500x400.png?text='.$produto->nome }}"
+                                                     class="card-img-top" alt="{{ $produto->nome }}" style="height: 350px; object-fit: cover; border-radius: 0.5rem 0.5rem 0 0;">
+                                                <div class="card-body d-flex flex-column">
+                                                    <h5 class="card-title text-umbanda">{{ $produto->nome }}</h5>
+                                                    <p class="card-text fw-bold text-umbanda" style="color:#6b3fa0; font-size:1.2rem;">
+                                                        R$ {{ number_format($produto->preco,2,",",".") }}
+                                                    </p>
+                                                    <!-- Botão para ver detalhes do produto -->
+                                                    <a href="{{ route('produtos.show', $produto) }}" class="btn btn-umbanda mt-auto mb-2">Ver Detalhes</a>
+
+                                                    <!-- Botão para adicionar ao carrinho abaixo de "Ver Detalhes" -->
+                                                    <form action="{{ route('carrinho.adicionar', $produto->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-warning text-dark fw-bold">➕ Adicionar ao Carrinho</button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
+                    <!-- Controles do carousel -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+                    </button>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselCategoria{{ $categoria->id }}" data-bs-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
-                </button>
-            </div>
-        </section>
-    @endif
-@endforeach
+            </section>
+        @endif
+    @endforeach
 
-
-    {{-- Produtos em Tabela --}}
+    {{-- Tabela de produtos --}}
     <section class="mb-5">
         <h2 class="text-umbanda mb-4 section-title">Tabela de Produtos</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover align-middle rounded-3 shadow">
+        <div class="table-responsive shadow rounded-3 overflow-hidden">
+            <table class="table table-striped table-hover align-middle mb-0">
                 <thead class="bg-umbanda text-white">
                     <tr>
                         <th>Produto</th>
@@ -104,11 +114,13 @@
                             <td>{{ $produto->categoria->nome ?? '-' }}</td>
                             <td class="text-center">
                                 <a href="{{ route('produtos.edit', $produto->id) }}" class="btn btn-sm text-white" style="background-color: #28a745;">✏</a>
+
                                 <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir {{ $produto->nome }}?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">🗑</button>
                                 </form>
+
                                 <form action="{{ route('carrinho.adicionar', $produto->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-sm text-dark" style="background-color: #FFD700; font-weight:bold;">➕</button>
