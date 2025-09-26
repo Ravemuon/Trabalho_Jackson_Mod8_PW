@@ -1,91 +1,120 @@
 @extends('layouts.app')
 
-@section('title', isset($encomenda) ? 'Editar Encomenda' : 'Nova Encomenda')
+@section('title', 'Finalizar Pedido')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4 text-light">{{ isset($encomenda) ? 'Editar Encomenda' : 'Nova Encomenda' }}</h1>
 
-    <form action="{{ isset($encomenda) ? route('encomendas.update', $encomenda) : route('encomendas.store') }}" method="POST">
-        @csrf
-        @if(isset($encomenda))
-            @method('PUT')
-        @endif
+    <h1 class="mb-4 text-center fw-bold" style="color: #000;">🛒 Finalizar Pedido</h1>
 
-        <div class="mb-3">
-            <label class="text-light">Nome do Cliente</label>
-            <input type="text" name="nome_cliente" class="form-control"
-                   value="{{ $encomenda->nome_cliente ?? old('nome_cliente') }}" required>
+    @php $carrinho = session('carrinho', []); @endphp
+
+    @if(count($carrinho) > 0)
+        {{-- Itens do carrinho --}}
+        <div class="table-responsive mb-4">
+            <table class="table table-light table-hover align-middle shadow rounded-3 overflow-hidden">
+                <thead class="bg-secondary text-light">
+                    <tr>
+                        <th>📦 Produto</th>
+                        <th>💲 Preço Unitário</th>
+                        <th>🔢 Quantidade</th>
+                        <th>💰 Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php $total = 0; @endphp
+                    @foreach($carrinho as $id => $item)
+                        @php
+                            $subtotal = $item['preco'] * $item['quantidade'];
+                            $total += $subtotal;
+                        @endphp
+                        <tr style="color: #000;">
+                            <td>{{ $item['nome'] }}</td>
+                            <td>R$ {{ number_format($item['preco'], 2, ',', '.') }}</td>
+                            <td>{{ $item['quantidade'] }}</td>
+                            <td>R$ {{ number_format($subtotal, 2, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+                    <tr class="fw-bold bg-secondary text-light">
+                        <td colspan="3" class="text-end">TOTAL</td>
+                        <td>R$ {{ number_format($total, 2, ',', '.') }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="mb-3">
-            <label class="text-light">Email do Cliente</label>
-            <input type="email" name="email_cliente" class="form-control"
-                   value="{{ $encomenda->email_cliente ?? old('email_cliente') }}" required>
-        </div>
+        {{-- Formulário de cliente --}}
+        <form action="{{ route('encomendas.store') }}" method="POST">
+            @csrf
 
-        <div class="mb-3">
-            <label class="text-light">Produto</label>
-            <select name="produto_id" id="produto_id" class="form-control" required>
-                <option value="">Selecione um produto</option>
-                @foreach($produtos as $produto)
-                    <option value="{{ $produto->id }}"
-                        data-preco="{{ $produto->preco }}"
-                        {{ (isset($encomenda) && $encomenda->produto_id == $produto->id) ? 'selected' : '' }}>
-                        {{ $produto->nome }}
-                    </option>
+            <h2 class="fw-bold mb-3" style="color: #000;">📋 Informações do Cliente</h2>
+
+            <div class="mb-3">
+                <label style="color: #000;">Nome do Cliente</label>
+                <input type="text" name="nome_cliente" class="form-control" value="{{ old('nome_cliente') }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label style="color: #000;">Email do Cliente</label>
+                <input type="email" name="email_cliente" class="form-control" value="{{ old('email_cliente') }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label style="color: #000;">Telefone</label>
+                <input type="text" name="telefone_cliente" class="form-control" value="{{ old('telefone_cliente') }}">
+            </div>
+
+            <div class="mb-3">
+                <label style="color: #000;">Observações</label>
+                <textarea name="observacoes" class="form-control">{{ old('observacoes') }}</textarea>
+            </div>
+
+            <input type="hidden" name="total" value="{{ $total }}">
+
+            {{-- Enviar itens do carrinho --}}
+            @foreach($carrinho as $id => $item)
+                <input type="hidden" name="produtos[{{ $id }}][produto_id]" value="{{ $id }}">
+                <input type="hidden" name="produtos[{{ $id }}][quantidade]" value="{{ $item['quantidade'] }}">
+            @endforeach
+
+            <button type="submit" class="btn btn-success w-100 btn-lg">✅ Finalizar Pedido</button>
+        </form>
+
+        {{-- Sugestões de produtos --}}
+        @isset($produtos)
+            <h2 class="mt-5 fw-bold" style="color: #000;">🌿 Sugestões para você</h2>
+            <div class="row g-4">
+                @foreach($produtos->take(4) as $produto)
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-lg border-0 rounded-4 overflow-hidden">
+                            @if($produto->imagem)
+                                <img src="{{ $produto->imagem }}" class="card-img-top" alt="{{ $produto->nome }}"
+                                     style="height: 180px; object-fit: cover;">
+                            @endif
+                            <div class="card-body d-flex flex-column" style="color: #000;">
+                                <h5 class="card-title fw-bold">{{ $produto->nome }}</h5>
+                                <p class="fw-bold mb-1">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
+                                <p class="small">Estoque: {{ $produto->estoque }}</p>
+                                <div class="mt-auto">
+                                    <form action="{{ route('carrinho.adicionar', $produto->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm w-100 rounded-pill"
+                                                style="background-color: #FFD700; color: #000; font-weight:bold;">
+                                            ➕ Adicionar ao Carrinho
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
-            </select>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <label class="text-light">Preço Unitário</label>
-                <input type="text" id="preco_unitario" class="form-control" value="-" readonly>
             </div>
+        @endisset
 
-            <div class="col-md-4 mb-3">
-                <label class="text-light">Quantidade</label>
-                <input type="number" name="quantidade" id="quantidade" class="form-control"
-                       value="{{ $encomenda->quantidade ?? old('quantidade', 1) }}" min="1" required>
-            </div>
+    @else
+        <p class="text-center fw-bold" style="color: #000;">⚠ Seu carrinho está vazio.</p>
+        <a href="{{ route('produtos.index') }}" class="btn btn-primary w-100 btn-lg mt-3">🛍️ Voltar às Compras</a>
+    @endif
 
-            <div class="col-md-4 mb-3">
-                <label class="text-light">Valor Total</label>
-                <input type="text" id="valor_total" class="form-control" value="-" readonly>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="text-light">Observações</label>
-            <textarea name="observacoes" class="form-control">{{ $encomenda->observacoes ?? old('observacoes') }}</textarea>
-        </div>
-
-        <button class="btn btn-success">{{ isset($encomenda) ? 'Atualizar' : 'Salvar' }}</button>
-    </form>
 </div>
-
-{{-- Script para calcular valores --}}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const produtoSelect = document.getElementById("produto_id");
-        const precoUnitarioInput = document.getElementById("preco_unitario");
-        const quantidadeInput = document.getElementById("quantidade");
-        const valorTotalInput = document.getElementById("valor_total");
-
-        function atualizarValores() {
-            const selected = produtoSelect.options[produtoSelect.selectedIndex];
-            const preco = parseFloat(selected.getAttribute("data-preco")) || 0;
-            const quantidade = parseInt(quantidadeInput.value) || 1;
-
-            precoUnitarioInput.value = preco > 0 ? "R$ " + preco.toFixed(2).replace(".", ",") : "-";
-            valorTotalInput.value = preco > 0 ? "R$ " + (preco * quantidade).toFixed(2).replace(".", ",") : "-";
-        }
-
-        produtoSelect.addEventListener("change", atualizarValores);
-        quantidadeInput.addEventListener("input", atualizarValores);
-
-        atualizarValores(); // inicializar caso já venha preenchido
-    });
-</script>
 @endsection

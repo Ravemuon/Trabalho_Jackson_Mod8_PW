@@ -2,67 +2,73 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Encomenda;
-use App\Models\Produto;
-use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Models\Encomenda;
+use App\Models\EncomendaItem;
+use App\Models\Produto;
 
 class EncomendaController extends Controller
 {
-    // Lista encomendas e produtos disponíveis
-    public function index(Request $request)
+    // Lista encomendas e sugestões de produtos
+    public function index()
     {
-        // Produtos com filtro de categoria ou pesquisa
-        $query = Produto::query();
+        $encomendas = Encomenda::with('itens.produto')->get();
+        $produtos = Produto::take(4)->get(); // produtos sugeridos
 
-        if ($request->has('categoria') && $request->categoria != '') {
-            $query->where('categoria_id', $request->categoria);
-        }
-
-        if ($request->has('search') && $request->search != '') {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('nome', 'like', "%$search%")
-                  ->orWhere('descricao', 'like', "%$search%");
-            });
-        }
-
-        $produtos = $query->get(); // ou paginate(x) para paginação
-
-        // Todas as categorias para filtros
-        $categorias = Categoria::all();
-
-        // Todas as encomendas
-        $encomendas = Encomenda::with('produto')->get();
-
-        return view('encomendas.index', compact('encomendas', 'produtos', 'categorias'));
+        return view('encomendas.index', compact('encomendas', 'produtos'));
     }
 
-    // Formulário de nova encomenda
+    // Formulário para finalizar pedido
     public function create()
     {
-        $produtos = Produto::all();
+        $produtos = Produto::take(4)->get(); // produtos sugeridos
         return view('encomendas.create', compact('produtos'));
     }
 
-    // Armazenar nova encomenda
+    // Salvar nova encomenda
     public function store(Request $request)
     {
         $request->validate([
             'nome_cliente' => 'required|min:3',
             'email_cliente' => 'required|email',
-            'produto_id' => 'required|exists:produtos,id',
-            'quantidade' => 'required|integer|min:1',
+            'produtos' => 'required|array|min:1',
+            'produtos.*.produto_id' => 'required|exists:produtos,id',
+            'produtos.*.quantidade' => 'required|integer|min:1',
         ]);
 
-        Encomenda::create($request->all());
+        $encomenda = Encomenda::create([
+            'nome_cliente' => $request->nome_cliente,
+            'email_cliente' => $request->email_cliente,
+            'telefone_cliente' => $request->telefone_cliente,
+            'observacoes' => $request->observacoes,
+            'total' => 0,
+        ]);
+
+        $total = 0;
+
+        foreach ($request->produtos as $item) {
+            $produto = Produto::findOrFail($item['produto_id']);
+            $subtotal = $produto->preco * $item['quantidade'];
+
+            $encomenda->itens()->create([
+                'produto_id' => $produto->id,
+                'quantidade' => $item['quantidade'],
+                'preco_unitario' => $produto->preco,
+                'subtotal' => $subtotal,
+            ]);
+
+            $total += $subtotal;
+        }
+
+        $encomenda->update(['total' => $total]);
 
         return redirect()->route('encomendas.index')->with('success', 'Encomenda cadastrada com sucesso!');
     }
 
-    // Editar encomenda
+    // Formulário para editar encomenda
     public function edit(Encomenda $encomenda)
     {
+        $encomenda->load('itens.produto');
         $produtos = Produto::all();
         return view('encomendas.edit', compact('encomenda', 'produtos'));
     }
@@ -73,11 +79,37 @@ class EncomendaController extends Controller
         $request->validate([
             'nome_cliente' => 'required|min:3',
             'email_cliente' => 'required|email',
-            'produto_id' => 'required|exists:produtos,id',
-            'quantidade' => 'required|integer|min:1',
+            'produtos' => 'required|array|min:1',
+            'produtos.*.produto_id' => 'required|exists:produtos,id',
+            'produtos.*.quantidade' => 'required|integer|min:1',
         ]);
 
-        $encomenda->update($request->all());
+        $encomenda->update([
+            'nome_cliente' => $request->nome_cliente,
+            'email_cliente' => $request->email_cliente,
+            'telefone_cliente' => $request->telefone_cliente,
+            'observacoes' => $request->observacoes,
+        ]);
+
+        // Remove itens antigos
+        $encomenda->itens()->delete();
+
+        $total = 0;
+        foreach ($request->produtos as $item) {
+            $produto = Produto::findOrFail($item['produto_id']);
+            $subtotal = $produto->preco * $item['quantidade'];
+
+            $encomenda->itens()->create([
+                'produto_id' => $produto->id,
+                'quantidade' => $item['quantidade'],
+                'preco_unitario' => $produto->preco,
+                'subtotal' => $subtotal,
+            ]);
+
+            $total += $subtotal;
+        }
+
+        $encomenda->update(['total' => $total]);
 
         return redirect()->route('encomendas.index')->with('success', 'Encomenda atualizada com sucesso!');
     }

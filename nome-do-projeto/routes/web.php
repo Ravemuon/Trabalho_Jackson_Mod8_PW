@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\EncomendaController;
+use App\Http\Controllers\CarrinhoController;
 
 // -----------------------------
 // Home
@@ -12,12 +13,12 @@ use App\Http\Controllers\EncomendaController;
 Route::get('/', [ProdutoController::class, 'home'])->name('home');
 
 // -----------------------------
-// Categorias (CRUD completo público)
+// Categorias (CRUD público)
 // -----------------------------
 Route::resource('categorias', CategoriaController::class);
 
 // -----------------------------
-// Produtos (CRUD completo público)
+// Produtos (CRUD público)
 // -----------------------------
 Route::resource('produtos', ProdutoController::class);
 
@@ -28,6 +29,15 @@ Route::get('/contato', [ContatoController::class, 'index'])->name('contato.index
 Route::post('/contato', [ContatoController::class, 'store'])->name('contato.store');
 
 // -----------------------------
-// Encomendas (CRUD completo público)
+// Encomendas (CRUD público)
 // -----------------------------
 Route::resource('encomendas', EncomendaController::class);
+
+// -----------------------------
+// Carrinho (manipulação de sessão)
+// -----------------------------
+Route::prefix('carrinho')->name('carrinho.')->group(function () {
+    Route::post('/adicionar/{id}', [CarrinhoController::class, 'adicionar'])->name('adicionar');
+    Route::post('/remover/{id}', [CarrinhoController::class, 'remover'])->name('remover');
+    Route::post('/limpar', [CarrinhoController::class, 'limpar'])->name('limpar');
+});

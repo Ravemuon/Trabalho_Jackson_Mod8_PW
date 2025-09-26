@@ -23,9 +23,19 @@ class CategoriaController extends Controller
     }
 
     // CRUD COMPLETO (pode ser acessado por todos por enquanto)
-    public function index()
+    public function index(Request $request)
     {
-        $categorias = Categoria::all();
+        $search = $request->input('search');
+
+        $query = Categoria::query();
+
+        if ($search) {
+            $query->where('nome', 'like', "%{$search}%")
+                  ->orWhere('descricao', 'like', "%{$search}%");
+        }
+
+        $categorias = $query->orderBy('linha')->get();
+
         return view('categorias.index', compact('categorias'));
     }
 
@@ -55,6 +65,7 @@ class CategoriaController extends Controller
     {
         return view('categorias.edit', compact('categoria'));
     }
+
     public function update(Request $request, Categoria $categoria)
     {
         $request->validate([

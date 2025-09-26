@@ -5,64 +5,59 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produto;
 use App\Models\Categoria;
+use App\Models\Encomenda;
 
 class ProdutoController extends Controller
 {
-        // Página inicial (home)
+    // Página inicial (home)
     public function home()
     {
-        // Pega todas categorias e produtos para mostrar na home
         $categorias = Categoria::all();
         $produtos = Produto::all();
+        $encomendas = Encomenda::with('itens.produto')->get();
+        $produtosRecentes = Produto::orderBy('created_at', 'desc')->take(6)->get();
 
-        return view('welcome', compact('categorias', 'produtos'));
+        return view('welcome', compact('categorias', 'produtos', 'encomendas','produtosRecentes'));
 
-        $query = Produto::query();
-
-        // Filtrar por categoria (quando clicado "Ver Produtos" em categoria)
-        if ($request->has('categoria') && $request->categoria != '') {
-            $query->where('categoria_id', $request->categoria);
-        }
     }
-    // LISTAR TODOS OS PRODUTOS (CRUD completo)
+
+    // Listar todos os produtos
     public function index(Request $request)
     {
         $query = Produto::query();
 
-        // Filtrar por categoria
-        if ($request->has('categoria') && $request->categoria != '') {
+        if ($request->filled('categoria')) {
             $query->where('categoria_id', $request->categoria);
         }
 
-        // Filtrar por pesquisa
-        if ($request->has('search') && $request->search != '') {
+        if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nome', 'like', "%$search%")
                   ->orWhere('descricao', 'like', "%$search%");
             });
         }
 
-        $produtos = $query->with('categoria')->get(); // ou paginate(12) se quiser paginação
+        $produtos = $query->with('categoria')->get();
         $categorias = Categoria::all();
 
         return view('produtos.index', compact('produtos', 'categorias'));
     }
 
-    // MOSTRAR DETALHES DE UM PRODUTO
+    // Mostrar detalhes de um produto
     public function show(Produto $produto)
     {
         return view('produtos.show', compact('produto'));
     }
 
-    // FORMULÁRIO PARA CRIAR PRODUTO
+    // Formulário para criar produto
     public function create()
     {
         $categorias = Categoria::all();
         return view('produtos.create', compact('categorias'));
     }
 
-    // SALVAR PRODUTO NOVO
+    // Salvar novo produto
     public function store(Request $request)
     {
         $request->validate([
@@ -86,14 +81,14 @@ class ProdutoController extends Controller
         return redirect()->route('produtos.index')->with('success', 'Produto criado!');
     }
 
-    // FORMULÁRIO PARA EDITAR PRODUTO
+    // Formulário para editar produto
     public function edit(Produto $produto)
     {
         $categorias = Categoria::all();
         return view('produtos.edit', compact('produto', 'categorias'));
     }
 
-    // ATUALIZAR PRODUTO
+    // Atualizar produto
     public function update(Request $request, Produto $produto)
     {
         $request->validate([
@@ -117,7 +112,7 @@ class ProdutoController extends Controller
         return redirect()->route('produtos.index')->with('success', 'Produto atualizado!');
     }
 
-    // EXCLUIR PRODUTO
+    // Excluir produto
     public function destroy(Produto $produto)
     {
         $produto->delete();
