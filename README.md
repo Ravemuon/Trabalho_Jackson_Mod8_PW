@@ -1,111 +1,490 @@
 # 🕯️ Altar Oculto - Loja de Umbanda
 
-[![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)]()
-[![IFSC](https://img.shields.io/badge/IFSC-Chapec%C3%B3-blue)]()
-[![Laravel](https://img.shields.io/badge/Laravel-11.x-red)]()
-[![PHP](https://img.shields.io/badge/PHP-8.2+-purple)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
+![Status do Projeto](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Laravel](https://img.shields.io/badge/Laravel-11.x-red)
+![PHP](https://img.shields.io/badge/PHP-8.2+-purple)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
 
-## 📋 Sobre o Projeto
+# 📋 Sobre o Projeto
 
-O **Altar Oculto** é um sistema de e-commerce desenvolvido como parte da disciplina de **Desenvolvimento de Aplicações Web** no **IFSC - Câmpus Chapecó**. O projeto consiste em uma loja virtual especializada em artigos para **Umbanda** e religiões de matriz africana, oferecendo produtos como velas, guias, imagens de orixás, ervas, fitas, assentamentos e acessórios para rituais.
+O **Altar Oculto** é um sistema de e-commerce desenvolvido para a disciplina de **Desenvolvimento de Aplicações Web** do **IFSC - Câmpus Chapecó**.
 
-O sistema foi desenvolvido utilizando o framework **Laravel** com padrão **MVC**, aplicando conceitos de **Programação Orientada a Objetos**, **Eloquent ORM** e **relacionamentos entre tabelas**. Além do catálogo de produtos, o sistema conta com painel administrativo, carrinho de compras, controle de pedidos e geração de relatórios gerenciais.
+O projeto consiste em uma loja virtual especializada em artigos espirituais, com foco em produtos relacionados à **Umbanda e religiões de matriz africana**, permitindo a visualização de categorias, produtos, informações espirituais e realização de encomendas.
 
----
+O sistema foi desenvolvido utilizando:
 
-## 👤 Credenciais de Acesso
-
-### Administrador
-Acesso total ao painel administrativo para gerenciar produtos, categorias, pedidos e clientes.
-
-| Campo | Valor |
-| :--- | :--- |
-| **E-mail** | `admin@teste.com` |
-| **Senha** | `admin123` |
-
-### Cliente (Usuário Comum)
-Acesso ao catálogo de produtos, carrinho de compras e histórico de pedidos.
-
-| Campo | Valor |
-| :--- | :--- |
-| **E-mail** | `cliente@teste.com` |
-| **Senha** | `password` |
+- Laravel 11
+- PHP 8.2+
+- MySQL
+- Blade
+- Eloquent ORM
+- MVC
+- Bootstrap
 
 ---
 
-## 🚀 Funcionalidades Principais
+# 🖼️ Telas do Sistema
 
-### 🛍️ Catálogo de Produtos
-- Listagem de produtos com imagens, descrições e preços.
-- Filtros por categoria (Ex: Velas, Guias, Imagens, Ervas, Acessórios).
-- Busca por nome ou descrição do produto.
-- Página de detalhes do produto com informações completas.
+## 🏠 Página Inicial
 
-### 🛒 Carrinho de Compras
-- Adição e remoção de produtos.
-- Atualização de quantidades.
-- Cálculo automático de subtotal e total.
+Tela principal da loja com apresentação dos produtos e categorias.
 
-### 📦 Pedidos e Checkout
-- Finalização de compra com dados de entrega.
-- Status do pedido (Pendente, Pago, Enviado, Entregue).
-- Histórico de pedidos do cliente.
+![Tela Inicial](assets/imagens/tela_inicial.png)
 
-### 👥 Autenticação e Usuários
-- Registro e login de clientes.
-- Perfis de **Administrador** e **Cliente**.
-- Controle de acesso baseado em permissões.
-
-### 📊 Dashboards e Relatórios
-- Gráficos de produtos mais vendidos (Chart.js).
-- Relatórios de faturamento por período.
-- Relatório de pedidos em PDF (DomPDF).
-- Métricas gerais: total de produtos, pedidos, clientes e faturamento.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🕯️ Categorias
 
-### Back-end
-- **PHP 8.2+**
-- **Laravel 11.x**
-- **Eloquent ORM** (relacionamentos 1:1, 1:N, N:N)
-- **MySQL** (banco de dados relacional)
+Exibição das categorias espirituais cadastradas no sistema.
 
-### Front-end
-- **Blade** (template engine do Laravel)
-- **Bootstrap 5** (estilização e responsividade)
-- **Chart.js** (gráficos interativos)
-- **DomPDF / Laravel-Snappy** (geração de relatórios)
+![Tela Categorias](assets/imagens/tela_categorias.png)
 
-### Ferramentas
-- **Composer** (gerenciador de dependências PHP)
-- **NPM** (gerenciador de pacotes front-end)
-- **Git & GitHub** (controle de versão)
-- **Visual Studio Code** (editor de código)
 
 ---
 
-## 📥 Como Executar o Projeto Localmente
+# 👤 Credenciais de Acesso
 
-### Pré-requisitos
+## Administrador
 
-Antes de começar, certifique-se de ter instalado:
+Acesso ao gerenciamento do sistema:
 
-| Ferramenta | Download | Finalidade |
-| :--- | :--- | :--- |
-| **Laravel Herd** | [herd.laravel.com](https://herd.laravel.com/windows) | Ambiente PHP + Nginx para Laravel |
-| **Laragon** | [laragon.org](https://laragon.org/download) | Ambiente completo (Apache, MySQL, PHP) |
-| **Visual Studio Code** | [code.visualstudio.com](https://code.visualstudio.com/) | Editor de código |
+- Produtos
+- Categorias
+- Usuários
+- Encomendas
+- Relatórios
+
+
+```
+E-mail:
+admin@site.com
+
+Senha:
+admin123
+```
+
 
 ---
 
-### Passo a Passo para Iniciar o Projeto
+## Cliente
 
-#### 1️⃣ Clone o repositório
+Usuário comum para realizar compras:
+
+```
+E-mail:
+cliente@site.com
+
+Senha:
+password
+```
+
+---
+
+# 🚀 Funcionalidades
+
+## 🛍️ Produtos
+
+- Cadastro de produtos
+- Categorias relacionadas
+- Controle de estoque
+- Imagens
+- Preços
+- Tags
+- Produtos populares
+
+
+---
+
+## 🕯️ Categorias
+
+Cada categoria possui informações detalhadas:
+
+- Nome
+- Descrição
+- História
+- Linha espiritual
+- Cores
+- Dia da semana
+- Símbolos
+- Elementos
+- Datas importantes
+- Observações
+
+
+---
+
+## 🛒 Encomendas
+
+Sistema de pedidos contendo:
+
+- Cliente responsável
+- Produtos
+- Valor total
+- Status
+- Observações
+- Dados de entrega
+
+
+Status disponíveis:
+
+```
+pendente
+enviado
+concluido
+```
+
+---
+
+## 👥 Usuários
+
+Sistema possui usuários cadastrados com:
+
+- Nome
+- Email
+- Senha
+- Imagem
+- Tipo de usuário
+
+Tipos:
+
+```
+Administrador
+Cliente
+Fornecedor
+```
+
+---
+
+# 🗄️ Estrutura do Banco
+
+Principais tabelas:
+
+```
+usuarios
+categorias
+produtos
+encomendas
+sessions
+fornecedor_produto
+pontos
+```
+
+Relacionamentos:
+
+```
+Categoria
+   |
+   | 1:N
+   |
+Produtos
+
+
+Usuário
+   |
+   | 1:N
+   |
+Encomendas
+
+
+Fornecedor
+   |
+   | N:N
+   |
+Produtos
+```
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+## Backend
+
+- PHP 8.2+
+- Laravel 11
+- Eloquent ORM
+- MySQL
+
+
+## Frontend
+
+- Blade
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
+
+
+## Ferramentas
+
+- Composer
+- NPM
+- Git
+- GitHub
+- Visual Studio Code
+
+---
+
+# 📥 Como Executar o Projeto
+
+## Pré-requisitos
+
+Instale:
+
+- PHP 8.2+
+- Composer
+- Node.js
+- MySQL
+- Git
+
+
+Recomendado:
+
+- Laravel Herd
+- Laragon
+- XAMPP
+
+
+---
+
+# 1️⃣ Clonar o projeto
+
+Execute:
+
 ```bash
 git clone https://github.com/Ravemuon/altar-oculto-laravel.git
+```
+
+Entre na pasta:
+
+```bash
 cd altar-oculto-laravel
+```
+
+---
+
+# 2️⃣ Instalar dependências PHP
+
+Execute:
+
+```bash
+composer install
+```
+
+---
+
+# 3️⃣ Instalar dependências Front-end
+
+Execute:
+
+```bash
+npm install
+```
+
+---
+
+# 4️⃣ Criar arquivo de configuração
+
+Copie o arquivo:
+
+```bash
+cp .env.example .env
+```
+
+No Windows:
+
+```bash
+copy .env.example .env
+```
+
+---
+
+# 5️⃣ Gerar chave Laravel
+
+Execute:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+# 6️⃣ Configurar Banco de Dados
+
+Abra o arquivo:
+
+```
+.env
+```
+
+Configure:
+
+```env
+DB_DATABASE=altar_oculto
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Crie o banco:
+
+```
+altar_oculto
+```
+
+no MySQL.
+
+---
+
+# 7️⃣ Executar migrations
+
+Criar todas as tabelas:
+
+```bash
+php artisan migrate
+```
+
+---
+
+# 8️⃣ Popular banco com dados iniciais
+
+Executar os seeders:
+
+```bash
+php artisan db:seed
+```
+
+ou:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Isso cria:
+
+- Categorias
+- Produtos
+- Usuários
+- Encomendas
+- Pontos
+
+
+---
+
+# 9️⃣ Executar projeto
+
+Inicie o Laravel:
+
+```bash
+php artisan serve
+```
+
+O sistema estará disponível em:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# Front-end em desenvolvimento
+
+Caso altere arquivos CSS ou JavaScript:
+
+Execute:
+
+```bash
+npm run dev
+```
+
+---
+
+# 📂 Estrutura do Projeto
+
+```
+altar_oculto/
+
+├── app/
+│   ├── Models/
+│   ├── Controllers/
+│
+├── database/
+│   ├── migrations/
+│   └── seeders/
+│
+├── resources/
+│   ├── views/
+│   ├── css/
+│   └── js/
+│
+├── public/
+│
+├── assets/
+│   └── imagens/
+│       ├── tela_inicial.png
+│       └── tela_categorias.png
+│
+├── routes/
+│   └── web.php
+│
+└── README.md
+```
+
+---
+
+# 📌 Comandos Úteis
+
+Limpar cache:
+
+```bash
+php artisan optimize:clear
+```
+
+
+Ver rotas:
+
+```bash
+php artisan route:list
+```
+
+
+Criar migration:
+
+```bash
+php artisan make:migration nome_da_migration
+```
+
+
+Criar model:
+
+```bash
+php artisan make:model Nome
+```
+
+
+Criar controller:
+
+```bash
+php artisan make:controller NomeController
+```
+
+---
+
+# 📜 Licença
+
+Este projeto está sob licença MIT.
+
+---
+
+# 👨‍💻 Desenvolvimento
+
+Projeto acadêmico desenvolvido para o:
+
+**IFSC - Instituto Federal de Santa Catarina  
+Câmpus Chapecó**
+
+Disciplina:
+
+**Desenvolvimento de Aplicações Web**

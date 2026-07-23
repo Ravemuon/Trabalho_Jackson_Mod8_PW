@@ -1,24 +1,96 @@
+# ==============================
+# Laravel padrão
+# ==============================
+
 *.log
-.DS_Store
+
 .env
 .env.backup
 .env.production
+
 .phpactor.json
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
+.phpunit.cache
+
 /auth.json
+
+/vendor
 /node_modules
+
 /public/build
 /public/hot
 /public/storage
+
 /storage/*.key
 /storage/pail
-/vendor
+
+
+# ==============================
+# IDEs
+# ==============================
+
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+
+# ==============================
+# Sistema operacional
+# ==============================
+
+.DS_Store
+Thumbs.db
+
+
+# ==============================
+# Laravel Homestead
+# ==============================
+
 Homestead.json
 Homestead.yaml
-Thumbs.db
+
+
+# ==============================
+# Banco MySQL local
+# ==============================
+
+mysql-8.4/
+
+*.ibd
+*.frm
+*.MYD
+*.MYI
+
+binlog.*
+mysql.pid
+mysql.sock
+
+
+# ==============================
+# Bancos locais / backups
+# ==============================
+
+*.sqlite
+*.sqlite3
+
+*.sql~
+*.bak
+*.backup
+
+
+# ==============================
+# Cache temporário
+# ==============================
+
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
