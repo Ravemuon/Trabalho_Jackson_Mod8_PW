@@ -51,7 +51,7 @@ Caso algum proprietário solicite a remoção ou substituição de algum conteú
 
 Tela principal da loja contendo apresentação dos produtos e categorias.
 
-![Tela Inicial](assets/imagens/tela_inicial.png)
+![Tela Inicial](altar_oculto/assets/imagens/tela_inicial.png)
 
 ---
 
@@ -59,7 +59,8 @@ Tela principal da loja contendo apresentação dos produtos e categorias.
 
 Página de categorias espirituais cadastradas no sistema.
 
-![Tela Categorias](assets/imagens/tela_categorias.png)
+![Tela Categorias](altar_oculto/assets/imagens/tela_categorias.png)
+
 
 ---
 
